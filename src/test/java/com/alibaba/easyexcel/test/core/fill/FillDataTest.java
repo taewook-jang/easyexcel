@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.easyexcel.test.demo.write.CustomCellWriteHandler;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -149,7 +150,14 @@ public class FillDataTest {
         FillData fillData = new FillData();
         fillData.setName("张三");
         fillData.setNumber(5.2);
-        EasyExcel.write(file, FillData.class).withTemplate(template).sheet().doFill(fillData);
+
+        ExcelWriter excelWriter = EasyExcel.write(file).withTemplate(template).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().registerWriteHandler(new CustomCellWriteHandler()).build();
+
+        excelWriter.fill(fillData, writeSheet);
+        excelWriter.finish();
+
+        //EasyExcel.write(file, FillData.class).withTemplate(template).sheet().doFill(fillData);
     }
 
     private List<FillData> data() {
